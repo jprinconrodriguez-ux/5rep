@@ -1,7 +1,7 @@
 local Gamestate = {
   phase = "MAIN",
   turn  = 1,
-  playedHands = {},           -- e.g., { ["One Pair"]=true }
+    playedHands = {},           -- e.g., { ["Pair"]=true }
   limits = { joker_played_this_turn = false }, -- scaffold for 3.2
   meta   = { run_id = 1 }     -- placeholder; increments per restart if desired
 }

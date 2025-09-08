@@ -5,7 +5,7 @@ local Rules = {}
 -- Categories used by the "played-once" board
 Rules.CATEGORIES = {
   "High Card",
-  "One Pair",
+  "Pair",
   "Two Pair",
   "Three of a Kind",
   "Straight",

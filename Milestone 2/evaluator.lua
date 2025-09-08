@@ -59,7 +59,7 @@ function Eval.exact_category(cards)
   local counts = countsByRank(cards)
   if n == 2 then
     for _, cnt in pairs(counts) do
-      if cnt == 2 then return "One Pair" end
+      if cnt == 2 then return "Pair" end
     end
     return nil
   end
