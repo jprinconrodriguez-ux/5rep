@@ -19,11 +19,10 @@ local function clamp_threshold(t) return math.max(1, math.floor(t or 1)) end
 
 function M.init(S)
   S.meta = S.meta or {}
-  if S.meta.threshold == nil then S.meta.threshold = 1
+  if S.meta.threshold == nil then S.meta.threshold = 1 end
   S.meta.turns = S.meta.turns or 0
   S.meta.pressure_level = S.meta.pressure_level or 0
   S.meta.turns_since_pressure = S.meta.turns_since_pressure or 0
-end
   if S.meta.score == nil then S.meta.score = 0 end
   if S.meta.punish_level == nil then S.meta.punish_level = 0 end -- +1 every 30 moves (hook later)
 end
@@ -101,23 +100,22 @@ function M.reset_for_next_threshold(S)
   S.meta.score = 0
 end
 
-return M
-
-
--- === Pressure Meter (every 30 turns) ===
-function M.on_turn_advanced(S)
-  if not S or not S.meta then return end
-  S.meta.turns = (S.meta.turns or 0) + 1
-  S.meta.turns_since_pressure = (S.meta.turns_since_pressure or 0) + 1
-  while S.meta.turns_since_pressure >= 30 do
-    S.meta.turns_since_pressure = S.meta.turns_since_pressure - 30
-    S.meta.pressure_level = (S.meta.pressure_level or 0) + 1
+  -- === Pressure Meter (every 30 turns) ===
+  function M.on_turn_advanced(S)
+    if not S or not S.meta then return end
+    S.meta.turns = (S.meta.turns or 0) + 1
+    S.meta.turns_since_pressure = (S.meta.turns_since_pressure or 0) + 1
+    while S.meta.turns_since_pressure >= 30 do
+      S.meta.turns_since_pressure = S.meta.turns_since_pressure - 30
+      S.meta.pressure_level = (S.meta.pressure_level or 0) + 1
+    end
   end
-end
 
-function M.pressure_next_in(S)
-  if not S or not S.meta then return 30 end
-  local r = 30 - (S.meta.turns_since_pressure or 0)
-  if r <= 0 then r = 30 end
-  return r
-end
+  function M.pressure_next_in(S)
+    if not S or not S.meta then return 30 end
+    local r = 30 - (S.meta.turns_since_pressure or 0)
+    if r <= 0 then r = 30 end
+    return r
+  end
+
+  return M

@@ -81,6 +81,9 @@ local function setStatus(s) statusMsg = s or "" end
 
 local S = {}
 
+-- Forward declaration
+local nextTurn
+
 -- === SAFE HELPERS ===
 
 -- Auto-reshuffle: when deck is empty, move all discard back to deck and shuffle
@@ -260,7 +263,6 @@ local function tryWin()
 end
 
 -- === TURN HELPERS ===
-local nextTurn
 
 local function enterEndPhase()
   -- Resolve attack then auto-advance
@@ -899,7 +901,16 @@ function love.draw()
   end
 
   
-  -- Threshold/Win overlay
+  -- Hand
+  for i, c in ipairs(hand) do
+    drawCard(c, i)
+  end
+
+  if lastResult and lastResult.exact then
+          love.graphics.print("Last Played: "..lastResult.exact, 40, lastPlayedY)
+  end
+
+  -- Threshold/Win overlay (draw last so it appears above other elements)
   if UI and UI.overlay then
     local msg = UI.overlay.message or "Threshold completed"
     local ww, wh = love.graphics.getWidth(), love.graphics.getHeight()
@@ -917,14 +928,5 @@ function love.draw()
     BTN_NEXT_T.y = py + ph - 50
     drawButton(BTN_NEXT_T)
     love.graphics.setColor(1,1,1)
-  end
-
-  -- Hand
-  for i, c in ipairs(hand) do
-    drawCard(c, i)
-  end
-
-  if lastResult and lastResult.exact then
-          love.graphics.print("Last Played: "..lastResult.exact, 40, lastPlayedY)
   end
 end
